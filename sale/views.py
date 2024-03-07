@@ -1,4 +1,3 @@
-import requests
 from collections import OrderedDict
 from base64 import b64encode
 from django.contrib.auth.decorators import login_required
