@@ -1,0 +1,178 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DAAWAT</title>
+    <!-- core:css -->
+    <link rel="stylesheet" href="{% static 'assets/vendors/core/core.css' %}">
+
+    <link rel="stylesheet" href="{% static 'assets/fonts/feather-font/css/iconfont.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/flag-icon-css/css/flag-icon.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'assets/css/style/style.css' %}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{% static 'assets/images/favicon.png' %}" />
+
+</head>
+
+<body>
+    <div class="main-wrapper">
+
+        <!-- partial:../../partials/_sidebar.html -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <a href="#" class="sidebar-brand">
+                    DAAWAT
+                </a>
+                <div class="sidebar-toggler not-active">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+           <div class="sidebar-body">
+        <ul class="nav">
+          <li class="nav-item">
+            <a href="{% url 'order' %} " class="nav-link">
+              <i class="link-icon" data-feather="file-text"></i>
+              <span class="link-title">Kot</span>
+            </a>
+          </li>
+         <li class="nav-item">
+            <a href="{% url 'sale_history' %} " class="nav-link">
+              <i class="link-icon" data-feather="book-open"></i>
+              <span class="link-title">Sale History</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'purchase' %}" class="nav-link">
+              <i class="link-icon" data-feather="file-plus"></i>
+              <span class="link-title">Purchase</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'purchase_history' %}" class="nav-link">
+              <i class="link-icon" data-feather="book"></i>
+              <span class="link-title">Purchase History</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin" class="nav-link">
+              <i class="link-icon" data-feather="user"></i>
+              <span class="link-title">Admin</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+        <div class="page-wrapper">
+
+            <!-- partial:../../partials/_navbar.html -->
+            <nav class="navbar">
+                <a href="#" class="sidebar-toggler">
+                    <i data-feather="menu"></i>
+                </a>
+                <div class="navbar-content">
+                </div>
+            </nav>
+            <!-- partial -->
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-md-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">Sale History</h6>
+                                <div class="row">
+
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="control-label">FROM</label><br>
+                                            <input type="date" name="" autocomplete="off" class="form-control"
+                                                required="" style="font-size: 18px; color: #fff;font-weight: bold;">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="control-label">TO</label><br>
+                                            <input type="date" name="" autocomplete="off" class="form-control"
+                                                required="" style="font-size: 18px; color: #fff;font-weight: bold;">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="control-label">ORDER TYPE</label><br>
+                                            <select name="payment_mode" class="btn btn-primary dropdown-toggle"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                                required>
+                                                <option value="Vendor Name" selected>Vendor Name</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label class="control-label" style="color: #0f1531;">SEARCH</label><br>
+                                            <button type="submit" class="btn btn-success submit">SEARCH</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h2>&nbsp;</h2>
+                                <div class="table-responsive">
+                                    <table id="dataTableExample" class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>DATE</th>
+                                                <th>SUPPLIER</th>
+                                                <th>TOTAL AMOUNT</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for invoice in purchases %}
+                                            <tr>
+                                                <td>{{invoice.id}}</a></td>
+                                                <td>{{invoice.date|date:"d/m/Y"}}</td>
+                                                <td>{{invoice.supplier.name}}</td>
+                                                <td>₹{{invoice.total_amount|floatformat:2}}</td>
+                                                <td>
+                                                <td><a class=" btn btn-outline-success" href="#">
+                                                        REPAY
+                                                    </a></td>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- partial:../../partials/_footer.html -->
+            <footer class="footer d-flex flex-column flex-md-row align-items-center justify-content-between">
+                <p class="text-muted text-center text-md-left">&copy; 2020 <a href=""> DAAWAT</a></p>
+                <p class="text-muted text-center text-md-left mb-0 d-none d-md-block">Designed & Developed By : <a
+                        href="http://strix.co.in/"> Strix</a></p>
+            </footer>
+            <!-- partial -->
+
+        </div>
+    </div>
+    <script src="{% static 'assets/vendors/core/core.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
+    <script src="https://unpkg.com/currency.js@~1.2.0/dist/currency.min.js"></script>
+    <script src="{% static 'assets/vendors/feather-icons/feather.min.js' %}"></script>
+    <script src="{% static 'assets/js/template.js' %}"></script>
+</body>
+
+</html>

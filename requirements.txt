@@ -1,0 +1,4 @@
+django
+djangorestframework
+dj_rest_auth
+pandas

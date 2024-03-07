@@ -1,0 +1,253 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DAAWAT</title>
+    <!-- core:css -->
+    <link rel="stylesheet" href="{% static 'assets/vendors/core/core.css' %}" >
+
+    <link rel="stylesheet" href="{% static 'assets/fonts/feather-font/css/iconfont.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/flag-icon-css/css/flag-icon.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'assets/css/style/style.css' %}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{% static 'assets/images/favicon.png' %}" />
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-wrapper">
+
+        <!-- partial:../../partials/_sidebar.html -->
+   <nav class="sidebar">
+      <div class="sidebar-header">
+        <a href="#" class="sidebar-brand"> DAAWAT </a>
+        <div class="sidebar-toggler not-active">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+        <div class="sidebar-body">
+            {% include "nav.html" %}
+        </div>
+    </nav>
+        <div class="page-wrapper">
+
+            <!-- partial:../../partials/_navbar.html -->
+            <nav class="navbar">
+                <a href="#" class="sidebar-toggler">
+                    <i data-feather="menu"></i>
+                </a>
+                <div class="navbar-content">
+                </div>
+            </nav>
+            <!-- partial -->
+
+            <div class="page-content" id="sale">
+                <div class="row">
+                    <div class="col-md-12 stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">New Bill</h6>
+                                <form method="POST" target="_blank">
+                                    {% csrf_token %}
+                                    <input type="hidden" v-model="bill_id" name="bill_id">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="control-label">CUSTOMER NAME</label><br>
+                                                <input type="text" name="cust_name"
+                                                    class="form-control" v-model="cust_name" required style="font-size: 18px; font-weight: bold;">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="control-label">CONTACT NUMBER</label><br>
+                                                <input type="text" name="contact"
+                                                    class="form-control" v-model="contact" required
+                                                    style="font-size: 18px; font-weight: bold;">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="control-label">ORDER TYPE</label><br>
+                                                <select name="order_type" v-model="order_type"
+                                                    class="btn btn-primary dropdown-toggle"
+                                                    aria-haspopup="true" aria-expanded="false"
+                                                    @change="change_order_type" required>
+                                                    <option value="RESTAURANT" selected>RESTAURANT</option>
+                                                    <option value="SWIGGY">SWIGGY</option>
+                                                    <option value="ZOMATO">ZOMATO</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="page-content">
+                                        <div class="row">
+                                            <div class="col-md-12 grid-margin stretch-card">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h6 class="card-title">ITEM LIST</h6>
+                                                        <div class="table-responsive">
+                                                            <table id="dataTableExample" class="table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>ITEM NAME</th>
+                                                                        <th>SIZE</th>
+                                                                        <th>RATE</th>
+                                                                        <th>QUANTITY</th>
+                                                                        <th>AMOUNT</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {% verbatim %}
+                                                                    <tr v-for="(item, i) in orders">
+                                                                        <td>{{item.name}}</td>
+                                                                        <td>{{item.size}}</td>
+                                                                        <td>{{item.rate}}</td>
+                                                                        <td>{{item.quantity}}</td>
+                                                                        <td>{{item.amount}}</td>
+                                                                    </tr>
+                                                                    {% endverbatim  %}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h1>&nbsp;</h1>
+                                        {% verbatim %}
+                                        <div class="row">
+                                            <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">SUB TOTAL</label><br>
+                                                    <input type="text" v-model="subtotal" name="sub_total" readonly
+                                                        class="form-control"
+                                                        style="font-size: 18px;  font-weight: bold;">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">DISCOUNT %</label><br>
+                                                    <input type="text" v-model="discount_percent"
+                                                        @change="calculate_money()" class="form-control"
+                                                        style="font-size: 18px;  font-weight: bold;">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">DISCOUNT AMT</label><br>
+                                                    <input type="text" name="discount" v-model="discount"
+                                                        @change="calculate_discount_percent"
+                                                        class="form-control"
+                                                        style="font-size: 18px;  font-weight: bold;">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">NET AMOUNT</label><br>
+                                                    <input type="text" v-model="net" name="net" class="form-control"
+                                                        readonly
+                                                        style="font-size: 18px; font-weight: bold;">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">SGST</label><br>
+                                                    <input type="text" v-model="sgst" name="sgst" class="form-control"
+                                                        readonly
+                                                        style="font-size: 18px;  font-weight: bold;">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">CGST</label><br>
+                                                    <input type="text" v-model="cgst" name="cgst" class="form-control"
+                                                        readonly
+                                                        style="font-size: 18px;  font-weight: bold;">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">GRAND TOTAL</label><br>
+                                                    <input type="text" name="amount" v-model="total"
+                                                        class="form-control" readonly
+                                                        style="font-size: 18px; font-weight: bold;">
+                                                </div>
+                                            </div>
+                                             <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">AMOUNT PAID</label><br>
+                                                    <input type="text" name="amount_paid" @change="calculate_amount_due" v-model="amount_paid"
+                                                        class="form-control"
+                                                        style="font-size: 18px; font-weight: bold;">
+                                                </div>
+                                            </div>
+                                             <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">DUE</label><br>
+                                                    <input type="text" name="amount_due" v-model="amount_due"
+                                                        class="form-control" readonly
+                                                        style="font-size: 18px; font-weight: bold;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endverbatim  %}
+                                        <div class="row">
+                                            <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <select name="payment_type" v-model="payment_type" id="payment_type" class="btn btn-primary dropdown-toggle"
+                                                        aria-haspopup="true"
+                                                        aria-expanded="false" @change="payment_change"required>
+                                                        <option value="CASH" selected>CASH</option>
+                                                        <option value="UPI">UPI</option>
+                                                        <option value="ATM">ATM</option>
+                                                        <option value="Non Paid">Non Paid</option>
+                                                    </select>
+                                                </div>
+                                             </div>
+                                        </div>
+                                        <button type="submit" @click="redirect" class="btn btn-success submit"
+                                            style="float: right;" >Save</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- partial:../../partials/_footer.html -->
+            <footer class="footer d-flex flex-column flex-md-row align-items-center justify-content-between">
+                <p class="text-muted text-center text-md-left">&copy; <a href="">DAAWAT</a></p>
+                <p class="text-muted text-center text-md-left mb-0 d-none d-md-block">Designed & Developed By : <a
+                        href="http://strix.co.in/"> Strix</a></p>
+            </footer>
+            <!-- partial -->
+
+        </div>
+    </div>
+
+    <!-- core:js -->
+    <script src="{% static 'assets/vendors/core/core.js' %}"></script>
+    <script src="{% static 'assets/js/vue.min.js' %}"></script>
+    <script src="{% static 'assets/js/currency.min.js' %}"></script>
+    <script src="{% static 'assets/js/axios.js' %} "></script>
+    <script src="{% static 'assets/js/bill.js' %}"></script>
+    <script src="{% static 'assets/vendors/feather-icons/feather.min.js' %}"></script>
+    <script src="{% static 'assets/js/template.js' %}"></script>
+</body>
+
+</html>

@@ -1,0 +1,176 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DAAWAT</title>
+    <!-- core:css -->
+    <link rel="stylesheet" href="{% static 'assets/vendors/core/core.css' %}">
+
+    <link rel="stylesheet" href="{% static 'assets/fonts/feather-font/css/iconfont.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/flag-icon-css/css/flag-icon.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'assets/css/style/style.css' %}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{% static 'assets/images/favicon.png' %}" />
+        [v-cloak] {
+            display: none;
+        }
+    
+</head>
+
+<body>
+    <div class="main-wrapper">
+
+        <!-- partial:../../partials/_sidebar.html -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+              <a href="#" class="sidebar-brand">
+                DAAWAT
+              </a>
+              <div class="sidebar-toggler not-active">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+            <div class="sidebar-body">
+              {% include "nav.html" %}
+            </div>
+          </nav>
+
+        <div class="page-wrapper">
+
+            <!-- partial:../../partials/_navbar.html -->
+            <nav class="navbar">
+                <a href="#" class="sidebar-toggler">
+                    <i data-feather="menu"></i>
+                </a>
+                <div class="navbar-content">
+                </div>
+            </nav>
+            <!-- partial -->
+
+            <div class="page-content" id="sale">
+                <div class="row">
+                    <div class="col-md-12 stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">ADD MENU</h6>
+                                <form method="POST">
+                                    {% csrf_token %}
+
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label class="control-label">ITEM NAME</label><br>
+                                                    <input type="text" name="name"  class="form-control"
+                                                        style="font-size: 18px;  font-weight: bold;">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    
+                                                    <label class="control-label">CATEGORY</label><br>
+                                                    
+                                                        <input type="text" name="category" list="categories" class="form-control"
+                                                        style="
+                                                            font-size: 18px;
+                              
+                                                            font-weight: bold;
+                                                          " />
+                                                          <datalist id="categories">
+                                                            {% for c in categories %}
+                                                                <option value="{{c}}">{{c}}</option>
+                                                            {% endfor %}
+                                                          </datalist>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label class="control-label">HALF PRICE</label><br>
+                                                    <input type="text" name="restaurant_half_price" class="form-control"
+                                                        style="font-size: 18px;  font-weight: bold;">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label class="control-label">FULL PRICE</label><br>
+                                                    <input type="text" name="restaurant_full_price" class="form-control"
+
+                                                        style="font-size: 18px; font-weight: bold;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                            <div class="row">
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label class="control-label">SWIGGY HALF</label><br>
+                                                    <input type="text" name="swiggy_half_price" class="form-control"
+
+                                                        style="font-size: 18px;  font-weight: bold;">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label class="control-label">SWIGGY FULL</label><br>
+                                                    <input type="text" name="swiggy_full_price" class="form-control"
+
+                                                        style="font-size: 18px;  font-weight: bold;">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label class="control-label">ZOMATO HALF</label><br>
+                                                    <input type="text" name="zomato_half_price" class="form-control"
+
+                                                        style="font-size: 18px;  font-weight: bold;">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label class="control-label">ZOMATO FULL</label><br>
+                                                    <input type="text" name="zomato_full_price" class="form-control"
+
+                                                        style="font-size: 18px;  font-weight: bold;">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-success submit"
+                                            style="float: right;">Save</button>
+                                </form>
+                                <h3>{{message}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- partial:../../partials/_footer.html -->
+            <footer class="footer d-flex flex-column flex-md-row align-items-center justify-content-between">
+                <p class="text-muted text-center text-md-left">&copy; <a href="">DAAWAT</a></p>
+                <p class="text-muted text-center text-md-left mb-0 d-none d-md-block">Designed & Developed By : <a
+                        href="http://strix.co.in/"> Strix</a></p>
+            </footer>
+            <!-- partial -->
+
+        </div>
+    </div>
+
+    <!-- core:js -->
+    <script src="{% static 'assets/vendors/core/core.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
+    <script src="https://unpkg.com/currency.js@~1.2.0/dist/currency.min.js"></script>
+    <script src="{% static 'assets/js/sale.js' %}"></script>
+    <script src="{% static 'assets/vendors/feather-icons/feather.min.js' %}"></script>
+    <script src="{% static 'assets/js/template.js' %}"></script>
+</body>
+
+</html>

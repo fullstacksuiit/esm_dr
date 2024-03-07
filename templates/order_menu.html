@@ -1,0 +1,123 @@
+{% load static %}
+<!doctype html>
+
+
+<html lang="en" class="no-js">
+<head>
+	<title>DAAWAT</title>
+
+	<meta charset="utf-8">
+
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link rel="stylesheet" href="{% static 'menu/css/style.min.css' %}">
+
+	<script src="{% static 'menu/js/script.min.js' %}"></script>
+
+</head>
+<body>
+
+	<!-- Container -->
+	<div id="container">
+		<!-- Header
+		    ================================================== -->
+		<header class="clearfix trans">
+			<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+				<div class="container">
+					<div class="inner-navbar">
+						<!-- Brand and toggle get grouped for better mobile display -->
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+								<span class="sr-only">Menu</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+							<a class="navbar-brand" href="">DAAWAT</a>
+						</div>
+
+						<!-- Collect the nav links, forms, and other content for toggling -->
+						<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+							<ul class="nav navbar-nav navbar-right navigate-section">
+                {% for category in map.keys %}
+                  <li><a href="#{{category}}">{{category}}</a></li>
+                {% endfor %}
+							</ul>
+						</div><!-- /.navbar-collapse -->
+					</div>
+				</div><!-- /.container -->
+			</nav>
+		</header>
+		<!-- End Header -->
+
+		<!-- page-banner-section
+			================================================== -->
+		<section class="page-banner-section menu">
+			<div class="container">
+				<h1>DAAWAT</h1>
+				<h3>Rourkela</h3>
+			</div>
+		</section>
+		<!-- End page-banner section -->
+
+		{% for category, items in map.items %}
+			<!-- menu-section ================================================== -->
+      {% if items %}
+        <section class="{% cycle 'menu-section left-content' 'menu-section right-content' %}" id="{{category}}">
+          <div class="background-items">
+            <div class="table-back"></div>
+            <div class="image-back">
+              <img src="{% static 'menu/upload/menu/b1.jpg' %}" alt="">
+            </div>
+          </div>
+          <div class="menu-box">
+            <div class="container">
+              <div class="row">
+                <div class="{% cycle 'col-sm-8' 'col-sm-8 col-sm-offset-4' %}">
+                  <div class="{% cycle 'title-section white-style' 'title-section' %}">
+                    <h1>{{category}}</h1>
+                  </div>
+                  <ul class="menu-list-items">
+                    {% for item in items %}
+                      <li>
+                        <div class="list-content">
+                          <h2>{{item.name}}</h2>
+                        </div>
+                          <span class="price">
+                            {% if item.restaurant_half_price > 0.0 %}
+                              {{item.restaurant_half_price}} /
+                            {% endif %}
+                            {{item.restaurant_full_price}}
+                          </span>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      {% endif %}
+			<!-- End menu section -->
+		{% endfor %}
+
+		<!-- footer ================================================== -->
+		<footer>
+			<div class="last-line">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-6">
+							<p>&copy; DAAWAT. All rights reserved.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<!-- End footer -->
+
+	</div>
+	<!-- End Container -->
+
+</body>
+</html>

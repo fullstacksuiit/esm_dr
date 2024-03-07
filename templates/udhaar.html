@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>DAAWAT</title>
+  <!-- core:css -->
+  <link rel="stylesheet" href="{% static 'assets/vendors/core/core.css' %}">
+
+  <link rel="stylesheet" href="{% static 'assets/fonts/feather-font/css/iconfont.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/vendors/flag-icon-css/css/flag-icon.min.css' %}">
+
+  <link rel="stylesheet" href="{% static 'assets/css/style/style.css' %}">
+  <!-- End layout styles -->
+  <link rel="shortcut icon" href="{% static 'assets/images/favicon.ico' %}" />
+
+</head>
+
+<body>
+  <div class="main-wrapper">
+
+    <!-- partial:../../partials/_sidebar.html -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <a href="#" class="sidebar-brand">
+          DAAWAT
+        </a>
+        <div class="sidebar-toggler not-active">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+      <div class="sidebar-body">
+        {% include "nav.html" %}
+      </div>
+    </nav>
+
+    <div class="page-wrapper">
+
+      <!-- partial:../../partials/_navbar.html -->
+      <nav class="navbar">
+        <a href="#" class="sidebar-toggler">
+          <i data-feather="menu"></i>
+        </a>
+        <div class="navbar-content">
+        </div>
+      </nav>
+      <!-- partial -->
+
+      <div class="page-content">
+        <div class="row">
+          <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <h6 class="card-title">Udhaar</h6>
+
+                <h2>&nbsp;</h2>
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      {% comment %} <label class="bmd-label-floating">SEARCH</label> {% endcomment %}
+                      <input type="search" id="myInput" onkeyup="myFunction()" placeholder="Search By Customer Name"
+                        class="form-control">
+
+                    </div>
+                  </div>
+                </div>
+                <div class="table-responsive">
+                  <table id="myTable" class="table">
+                    <thead>
+                      <tr>
+                        <th>CUSTOMER NAME</th>
+                        <th>CONTACT NO.</th>
+                        <th>AMOUNT DUE</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for u in udhar_khata %}
+                      <tr>
+                        <td>{{u.customer}}</a></td>
+                        <td>{{u.contact}}</a></td>
+                        <td>{{u.amount_due | floatformat:2}}</a></td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- partial:../../partials/_footer.html -->
+      <footer class="footer d-flex flex-column flex-md-row align-items-center justify-content-between">
+        <p class="text-muted text-center text-md-left">&copy; 2020 <a href=""> DAAWAT</a></p>
+        <p class="text-muted text-center text-md-left mb-0 d-none d-md-block">Designed & Developed By : <a
+            href="http://strix.co.in/"> Strix</a></p>
+      </footer>
+      <!-- partial -->
+
+    </div>
+  </div>
+  <script>
+    function myFunction() {
+      // Declare variables
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("myTable");
+      tr = table.getElementsByTagName("tr");
+
+      // Loop through all table rows, and hide those who don't match the search query
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+  </script>
+  <script src="{% static 'assets/vendors/core/core.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
+  <script src="https://unpkg.com/currency.js@~1.2.0/dist/currency.min.js"></script>
+  <script src="{% static 'assets/vendors/feather-icons/feather.min.js' %}"></script>
+  <script src="{% static 'assets/js/template.js' %}"></script>
+</body>
+
+</html>

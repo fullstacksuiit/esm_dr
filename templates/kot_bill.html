@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>DAAWAT</title>
+    <link href="{% static 'assets/css/bill.css' %}" rel="stylesheet" />
+    <!-- <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet"> -->
+    <style>
+      @page {
+        size: auto;
+        margin: 0mm;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="invoice-POS">
+      <!-- <p >DAAWAT</p> -->
+      <p
+        style="
+          font-weight: 600;
+          font-size: 15px;
+          flex-direction: column-reverse;
+          line-height: 1;
+        "
+      >
+        &nbsp;&nbsp;&nbsp;&nbsp;Table No: {{table}}
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date: {% now "d/m/Y" %}<br />
+        &nbsp;&nbsp; Time: {% now "h:i A" %} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Staff: {{staff}}
+      </p>
+      <!--End Invoice Mid-->
+      <div id="bot">
+        <div id="table">
+          <table
+            style="
+              width: 10cm;
+              font-weight: 600;
+              font-size: 15px;
+              line-height: 1.5;
+            "
+          >
+            <tr>
+              <th style="width: 10%">&nbsp;&nbsp;&nbsp;Sl.</th>
+              <th style="width: 30%; text-align: left"><u>Item</u></th>
+              <th style="width: 20%; text-align: left"><u>Plate</u></th>
+              <th style="width: 10%; text-align: left"><u>Qty</u></th>
+            </tr>
+            <hr />
+            {% for o in orders %}
+            <tr>
+              <th scope="row" style="width: 10%">
+                &nbsp;&nbsp;&nbsp;{{ forloop.counter }}
+              </th>
+              <td
+                style="
+                  text-align: left;
+                  letter-spacing: 0.2px;
+                  font-weight: bold;
+                "
+              >
+                {{ o.dish_name }}
+              </td>
+              <td style="text-align: left">{{ o.size }}</td>
+              <td style="text-align: left">{{ o.quantity }}</td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+        <!--End Table-->
+        <hr />
+      </div>
+    </div>
+    <!--End Invoice-->
+    <!-- partial -->
+  </body>
+</html>

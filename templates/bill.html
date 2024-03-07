@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>DAAWAT</title>
+  <link href="{% static 'assets/css/bill.css' %}" rel="stylesheet" />
+  <!-- <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet"> -->
+
+  <style>
+    @page {
+      margin: 0mm;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- partial:index.partial.html -->
+
+  <div id="invoice-POS">
+    <center id="top">
+      
+      <div class="info">
+        <h3 style="font-weight: 900; font-size: 18px; line-height: 1.2;">
+         ESTIMATE
+         
+        </h3>
+        <hr />
+      </div>
+      <!--End Info-->
+    </center>
+    <!--End InvoiceTop-->
+
+    <p style="
+          font-weight: 600;
+          font-size: 14px;
+         line-height: 0.95;
+
+        ">
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      Bill no.: {{bill.ref_no}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      Date: {{bill.date|date:"d/m/Y"}}
+      <br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Table No: {{bill.table_no}}
+
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      Time: {{bill.time|time:"h:i A"}} <br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Customer : {{ bill.cust_name }}
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      Mode: {{ bill.payment_type }}
+    </p>
+    <hr />
+
+    <!--End Invoice Mid-->
+
+    <div id="bot">
+      <div id="table">
+        <table style="width: 10cm; font-weight: 600; font-size: 15px; line-height: 1.2;">
+          <tr>
+
+            <th style="width: 10%; text-align: center;">&nbsp;&nbsp;&nbsp;<u>Sl</u></th>
+            <th style="width: 35%; text-align: left"><u>Item</u></th>
+            <th style="width: 5%; text-align: center"><u>Qty</u></th>
+            <th style="width: 10%; text-align: center"><u>Rate</u></th>
+            <th style="width: 20%; text-align: left"><u>Amount</u></th>
+          </tr>
+
+          {% for d in orders %}
+          <tr>
+            <th scope="row" style="width: 10%; text-align: center;">
+              &nbsp;&nbsp;&nbsp;&nbsp;{{ forloop.counter }}.
+            </th>
+            <td style="text-align: left">{{d.dish.name}}</td>
+            <td style="text-align: center">{{d.quantity}}</td>
+            <td style="text-align: center">{{d.price}}</td>
+            <td style="text-align: left;">
+              {% widthratio d.price 1 d.quantity %}.00
+
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+        <hr />
+        <p style="font-weight: 700; text-align: right; font-size: 14px; line-height: 0.9;">
+          SubTotal: Rs.
+          {{bill.sub_total | floatformat:2}}&nbsp;&nbsp;&nbsp;&nbsp;<br />
+
+
+
+          {% if bill.discount > 0 %}
+          <strong>Discount: Rs.
+            {{bill.discount | floatformat:2}}</strong>&nbsp;&nbsp;&nbsp;&nbsp;<br />
+          ------------ &nbsp;&nbsp;&nbsp;<br />
+          Net Amount: Rs. {{bill.net | floatformat:2}}&nbsp;&nbsp;&nbsp;&nbsp;
+          {% endif %}
+        </p>
+        {% if bill.cgst > 0 %}
+        <p style="font-weight: 700; text-align: right; font-size: 14px; line-height: 1.0;">
+
+          SGST @2.5% : Rs. {{bill.sgst | floatformat:2}}&nbsp;&nbsp;&nbsp;&nbsp;<br />
+          CGST @2.5% : Rs. {{bill.cgst | floatformat:2}}&nbsp;&nbsp;&nbsp;&nbsp;<br />
+
+          --------------------------
+
+        </p>
+        {% endif %}
+        <p style="font-weight: 900; font-size: 18px; text-align: right; line-height: 0.1;">
+          Net Amt: Rs. {{bill.amount | floatformat:2}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </p>
+      </div>
+      <!--End Table-->
+      <hr />
+      <div id="legalcopy">
+        {% comment %} {% if qr %}
+        <p style="text-align: center"><img src="data:image/svg+xml;base64,{{ qr }}" style="height: 150px; width: 150px"></p>
+        <p style="text-align: center; font-weight: 700; font-size: 12px;line-height: 0.9;"> Scan To Pay (GooglePay / PhonePe / PayTM / UPI) </p>
+      {% endif %} {% endcomment %}
+        <p class="legal" style="text-align: center; font-weight: 700; font-size: 14px;line-height: 0.9;">
+          <strong>Thank you for Visitng</strong><br />Have a Nice Day<br>
+          Designed & Developed by : strix.co.in
+        </p>
+      </div>
+    </div>
+    <!--End InvoiceBot-->
+  </div>
+  <!--End Invoice-->
+  <!-- partial -->
+</body>
+
+</html>

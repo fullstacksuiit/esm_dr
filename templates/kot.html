@@ -1,0 +1,241 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>DAAWAT</title>
+  <!-- core:css -->
+  <link rel="stylesheet" href="{% static 'assets/vendors/core/core.css' %}" />
+
+  <link rel="stylesheet" href="{% static 'assets/fonts/feather-font/css/iconfont.css' %}" />
+  <link rel="stylesheet" href="{% static 'assets/vendors/flag-icon-css/css/flag-icon.min.css' %}" />
+
+  <link rel="stylesheet" href="{% static 'assets/css/style/style.css' %}" />
+  <!-- End layout styles -->
+  <link rel="shortcut icon" href="{% static 'assets/images/favicon.ico' %}" />
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main-wrapper" id="sale">
+    <!-- partial:../../partials/_sidebar.html -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <a href="#" class="sidebar-brand"> DAAWAT </a>
+        <div class="sidebar-toggler not-active">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+      <div class="sidebar-body">
+        {% include "nav.html" %}
+      </div>
+    </nav>
+
+    <div class="page-wrapper">
+      <!-- partial:../../partials/_navbar.html -->
+      <nav class="navbar">
+        <a href="#" class="sidebar-toggler">
+          <i data-feather="menu"></i>
+        </a>
+        <div class="navbar-content"></div>
+      </nav>
+      <!-- partial -->
+
+      <div class="page-content">
+        <div class="row">
+          <div class="col-md-12 stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <h6 class="card-title">KOT</h6>
+                <form method="POST" onsubmit="setTimeout(function(){window.location.reload();},10);" target="_blank">
+                  {% csrf_token %}
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label class="control-label">TABLE NO</label><br />
+                        <input type="text" name="table" class="form-control" required="" style="
+                              font-size: 18px;
+
+                              font-weight: bold;
+                            " />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row" v-for="(item,i) in items">
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <label class="control-label">ITEM ID</label><br />
+                        <input type="text" name="item_id" list="dishes" v-model="item.id" class="form-control"
+                          @change="get_dish(i)" style="
+                              font-size: 18px;
+
+                              font-weight: bold;
+                            " />
+                        <datalist id="dishes">
+                          {% for d in dishes %}
+                          <option value="{{d.id}}">{{d.name}}</option>
+                          {% endfor %}
+                        </datalist>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <label class="control-label">ITEM NAME</label><br />
+                        <input type="text" name="item_name" v-model="item.name" readonly class="form-control" style="
+                              font-size: 18px;
+
+                              font-weight: bold;
+                            " />
+                      </div>
+                    </div>
+                    <div class="col-sm-1">
+                      <div class="form-group">
+                        <label class="control-label">QUANTITY</label><br />
+                        <input type="text" name="quantity" v-model="item.quantity" class="form-control" style="
+                              font-size: 18px;
+
+                              font-weight: bold;
+                            " />
+                      </div>
+                    </div>
+                    <div class="col-sm-2">
+                      <div class="form-group">
+                        <label class="control-label">PLATE</label><br />
+                        <select name="plate" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                          aria-haspopup="true" aria-expanded="false" v-model="item.plate" required>
+                          <option value="full" selected>FULL</option>
+                          <option value="half">HALF</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-sm-1">
+                      <div class="form-group">
+                        <label class="control-label">DELETE</label><br />
+                        <button type="button" @click="removeSaleRow(i)" class="btn btn-danger">
+                          <!-- <i class="btn-icon-prepend" data-feather="minus-circle"></i> --> X
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-2">
+                      <div class="form-group">
+                        <label class="control-label">ADD</label><br />
+                        <button type="button" @click="addSaleRow" class="btn btn-success">
+                          <!-- <i class="btn-icon-prepend" data-feather="plus-square"></i> -->+
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-success" style="float: right">
+                    Save
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12 stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <h6 class="card-title">ACTIVE KOT</h6>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      {% for t in active_tables %}
+                      <a class="btn btn-outline-success" aria-pressed="true" data-toggle="modal"
+                        data-target="#dishes_modal" @click="get_bill({{t.id}})">
+                        TABLE: {{t.table_no}}
+                      </a>
+                      {% endfor %}
+                      <!-- Modal -->
+                      <div class="modal fade" id="dishes_modal" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                          {% verbatim %}
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalCenterTitle">
+                                TABLE NO : {{current_table}}
+                              </h5>
+                            </div>
+                            <div class="modal-body">
+                              <div class="table-responsive">
+                                <table id="dataTableExample" class="table">
+                                  <thead>
+                                    <tr>
+                                      <th>ITEM NAME</th>
+                                      <th>SIZE</th>
+                                      <th>QUANTITY</th>
+                                      <th>Delete</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr v-for="(item, i) in orders">
+                                      <td>{{item.dish.name}}</td>
+                                      <td>{{item.size}}</td>
+                                      <td>{{item.quantity}}</td>
+                                      <td>
+                                        <button type="button" @click="remove_order(i)" class="btn btn-danger">
+                                          <!-- <i class="btn-icon-prepend" data-feather="x"></i> -->X
+                                        </button>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-danger" data-dismiss="modal">
+                                Close
+                              </button>
+                              <button type="button" class="btn btn-success" @click="generate_bill">
+                                Generate Bill
+                              </button>
+                            </div>
+                            {% endverbatim %}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- partial:../../partials/_footer.html -->
+      <footer class="footer d-flex flex-column flex-md-row align-items-center justify-content-between">
+        <p class="text-muted text-center text-md-left">
+          &copy; <a href="">DAAWAT</a>
+        </p>
+        <p class="text-muted text-center text-md-left mb-0 d-none d-md-block">
+          Designed & Developed By : <a href="http://strix.co.in/"> Strix</a>
+        </p>
+      </footer>
+      <!-- partial -->
+    </div>
+  </div>
+
+  <!-- core:js -->
+  <script src="{% static 'assets/vendors/core/core.js' %}"></script>
+  <script src="{% static 'assets/js/vue.min.js' %}"></script>
+  <script src="{% static 'assets/js/currency.min.js' %}"></script>
+  <script src="{% static 'assets/js/axios.js' %} "></script>
+  <script src="{% static 'assets/js/sale.js' %}"></script>
+  <script src="{% static 'assets/vendors/feather-icons/feather.min.js' %}"></script>
+  <script src="{% static 'assets/js/template.js' %}"></script>
+</body>
+
+</html>
