@@ -78,4 +78,5 @@ def filter_invoices(start_date, end_date, order_type, payment_type):
         bills = bills.filter(order_type=order_type)
     if payment_type:
         bills = bills.filter(payment_type=payment_type)
+    orders = Order.objects.filter(bill_id__in=bills)
     return bills, orders
